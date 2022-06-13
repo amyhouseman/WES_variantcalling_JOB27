@@ -26,7 +26,7 @@ CONTAINER=$MY_CONTAINER_PATH/$CONTAINER_FILE
 EXOME_IDs_FILE=Polyposis_Exome_Analysis_JOB27/fastp/All_fastp_input/IDswithoutR1R2_JOB27
 SAMTOOLSSORTEDBAM=Polyposis_Exome_Analysis_JOB27/samtools/sort/{}PE_samtoolssorted.bam
 SAMTOOLSINDEXBAI=Polyposis_Exome_Analysis_JOB27/samtools/sort/{}PE_samtoolssorted.bam.bai
-SAMTOOLSINDEXONSORTEDOUTPUTFOLDER=/Polyposis_Exome_Analysis_JOB27/samtools/index/indexed_samtoolssortedfiles/
+SAMTOOLSINDEXONSORTEDOUTPUTFOLDER=Polyposis_Exome_Analysis_JOB27/samtools/index/indexed_samtoolssortedfiles/
 
 if [ "$SLURM_ARRAY_TASK_ID" == "1" ]
 then
