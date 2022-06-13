@@ -1,0 +1,32 @@
+#!/bin/bash --login
+#SBATCH -J AmyHouseman_BWAindex
+#SBATCH -o %x.stdout.%J.%N
+#SBATCH -e %x.stderr.%J.%N
+#SBATCH --ntasks=1
+#SBATCH --ntasks-per-node=1
+#SBATCH -p c_compute_wgp
+#SBATCH --account=scw1581
+#SBATCH --mail-type=ALL          # Mail events (NONE, BEGIN, END, FAIL, ALL)
+#SBATCH --mail-user=HousemanA@cardiff.ac.uk     # Where to send mail
+#SBATCH --time=72:00:00
+#SBATCH --mem-per-cpu=64GB
+
+module purge
+module load singularity
+module load parallel
+
+# Make bash exit on first error.
+set -eu
+
+CONTAINER_FILE=bwa-0.7.17.sif
+MY_CONTAINER_PATH=/scratch/$USER/containers
+CONTAINER=$MY_CONTAINER_PATH/$CONTAINER_FILE
+HG38_REFERENCE=Polyposis_Exome_Analysis_JOB27/bwa/index/indexhumanrefseq_output/GRCh38_latest_genomic.fna
+
+mkdir -p $MY_CONTAINER_PATH
+[ -f "$CONTAINER" ] || ssh cl1 wget -O $CONTAINER https://wotan.cardiff.ac.uk/containers/$CONTAINER_FILE
+
+cd /scratch/c.c21087028/
+
+#Run BWA using the index function and the HumanRefSeq file
+singularity run $CONTAINER index -a bwtsw $HG38_REFERENCE
