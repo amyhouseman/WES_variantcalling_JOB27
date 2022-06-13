@@ -1,0 +1,44 @@
+#!/bin/bash --login
+#SBATCH -J AmyHouseman_samtoolsview
+#SBATCH -o %x.stdout.%J.%N
+#SBATCH -e %x.stderr.%J.%N
+#SBATCH --ntasks=1
+#SBATCH --ntasks-per-node=1
+#SBATCH -p compute
+#SBATCH --account=scw1581
+#SBATCH --mail-type=ALL          # Mail events (NONE, BEGIN, END, FAIL, ALL)
+#SBATCH --mail-user=HousemanA@cardiff.ac.uk     # Where to send mail
+#SBATCH --array=1-23
+#SBATCH --time=06:00:00
+
+module purge
+module load singularity
+module load parallel
+
+# Set bash error trapping to exit on first error.
+set -eu
+
+WDPATH=/scratch/$USER/$SLURM_ARRAY_JOB_ID
+CONTAINER_FILE=samtools-1.9.sif
+MY_CONTAINER_PATH=/scratch/$USER/containers
+CONTAINER=$MY_CONTAINER_PATH/$CONTAINER_FILE
+EXOME_IDs_FILE=Polyposis_Exome_Analysis_JOB27/fastp/All_fastp_input/IDswithoutR1R2_JOB27
+BWAMEM_SAM=Polyposis_Exome_Analysis_JOB27/bwa/mem/bwamemsam/{}PE_bwamem.sam
+BWAMEM_BAM=Polyposis_Exome_Analysis_JOB27/samtools/view/{}PE_samtoolsview.bam
+
+if [ "$SLURM_ARRAY_TASK_ID" == "1" ]
+then
+  mkdir -p $MY_CONTAINER_PATH
+  [ -f "$CONTAINER" ] || ssh cl1 wget -O $CONTAINER https://wotan.cardiff.ac.uk/containers/$CONTAINER_FILE
+  mkdir $WDPATH
+fi
+
+while [ ! -d $WDPATH ]
+do
+  sleep 10
+done
+
+cd /scratch/c.c21087028/
+
+# SAM to BAM for PE reads
+sed -n "${SLURM_ARRAY_TASK_ID}p" $EXOME_IDs_FILE | parallel -j 1 "singularity run $CONTAINER view -b $BWAMEM_SAM > $BWAMEM_BAM"
