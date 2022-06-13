@@ -1,10 +1,10 @@
 #!/bin/bash --login
-#SBATCH -J AmyHouseman_bwamem
+#SBATCH -J AmyHouseman_bwamemJOB27
 #SBATCH -o %x.stdout.%J.%N
 #SBATCH -e %x.stderr.%J.%N
 #SBATCH --ntasks=1
 #SBATCH --ntasks-per-node=1
-#SBATCH -p c_compute_wgp
+#SBATCH -p compute
 #SBATCH --account=scw1581
 #SBATCH --mail-type=ALL          # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=HousemanA@cardiff.ac.uk     # Where to send mail
