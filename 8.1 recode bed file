@@ -29,7 +29,10 @@ JOB27_bed_recode <- AgilentSureSelectDNASureSelectXTHumanAlExonV5_hg38.bed %>% m
                                                'chrX'="NC_000023.11",
                                                'chrY'="NC_000024.10"))
                                                
-write.csv(JOB27_bed_recode,"AgilentSureSelectDNASureSelectXTHumanAlExonV5_hg38.csv", row.names=FALSE)
+NEED TO FINISH
+
+#Remove final column
+write.csv(JOB27_bed_recode,"AgilentSureSelectDNASureSelectXTHumanAllExonV5_hg38.csv", row.names=FALSE, quotes = FALSE)
 
 in bash:
-mv AgilentSureSelectDNASureSelectXTHumanAlExonV5_hg38.csv AgilentSureSelectDNASureSelectXTHumanAlExonV5_hg38_recoded.bed
+mv AgilentSureSelectDNASureSelectXTHumanAllExonV5_hg38_recoded_nocol4.csv AgilentSureSelectDNASureSelectXTHumanAllExonV5_hg38_recoded_nocol4.bed
